@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 
 from matplotlib import pyplot
@@ -8,7 +9,7 @@ import spm1d
 #(0) Load dataset:
 dataset      = spm1d.data.mv1d.cca.Dorn2012()
 Y,x          = dataset.get_data()  #A:slow, B:fast
-print dataset
+print(dataset)
 
 
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import spm1d
 
@@ -15,7 +16,7 @@ dataset    = spm1d.data.uv0d.anova2rm.Antidepressant()
 # dataset    = spm1d.data.uv0d.anova2rm.SPM1D4x4()
 # dataset    = spm1d.data.uv0d.anova2rm.SPM1D4x5()
 y,A,B,SUBJ = dataset.get_data()
-print dataset
+print(dataset)
 
 
 
@@ -25,7 +26,7 @@ print dataset
 F = spm1d.stats.anova2rm(y, A, B, SUBJ)
 # F = spm1d.stats.anova2rm(y, B, A, SUBJ)
 Fvalues = [f.z for f in F]
-print Fvalues
+print(Fvalues)
 
 
 

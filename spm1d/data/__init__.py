@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 
-import uv0d, mv0d
-import uv1d, mv1d
+from . import uv0d, mv0d
+from . import uv1d, mv1d
 
 
 

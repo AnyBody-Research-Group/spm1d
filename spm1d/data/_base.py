@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import os
 import numpy as np
@@ -39,10 +40,10 @@ class _Dataset(object):
 		s     += ss 
 		return s
 	def _printR(self, x, name='x'):
-		print '%s = c(%s)' %(name, str(x.tolist())[1:-1])
+		print('%s = c(%s)' %(name, str(x.tolist())[1:-1]))
 	def _printRs(self, xx, names=('x')):
 		for x,name in zip(xx,names):
-			print
+			print()
 			self._printR(x, name)
 	def _set_values(self):    #abstract method;  instantiated by all subclasses
 		pass

@@ -19,6 +19,7 @@ statistical parametric mapping. Journal of Biomechanics.
 Copyright (C) 2015  Todd Pataky
 Version: 0.3.1.4 (2015/10/16)
 '''
+from __future__ import absolute_import
 
 
 __version__ = '0.3.1.4 (2015/10/16)'
@@ -27,7 +28,7 @@ __version__ = '0.3.1.4 (2015/10/16)'
 __all__ = ['io', 'plot', 'stats', 'util']
 
 
-import data, io, plot, stats, util
+from . import data, io, plot, stats, util
 
 
 

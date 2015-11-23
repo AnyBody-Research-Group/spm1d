@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 from matplotlib import pyplot
 import spm1d
@@ -7,7 +8,7 @@ import spm1d
 #(0) Load data:
 dataset      = spm1d.data.mv1d.hotellings_paired.Neptune1999kneekin()
 YA,YB        = dataset.get_data()  #A:foot, B:speed
-print dataset
+print(dataset)
 
 
 
