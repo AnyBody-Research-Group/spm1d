@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 
 import numpy as np
 from . import _mvbase
@@ -20,7 +23,7 @@ def _T2_twosample_singlenode(yA, yB):  #at a single node:
 	yA,yB    = np.matrix(yA), np.matrix(yB)
 	mA,mB    = yA.mean(axis=0), yB.mean(axis=0)  #means
 	WA,WB    = np.cov(yA.T), np.cov(yB.T)
-	W        = ((JA-1)*WA + (JB-1)*WB) / (JA+JB-2)
+	W        = old_div(((JA-1)*WA + (JB-1)*WB), (JA+JB-2))
 	T2       = (JA*JB)/float(JA+JB)  * (mB-mA) * np.linalg.inv(W) * (mB-mA).T
 	return float(T2)
 

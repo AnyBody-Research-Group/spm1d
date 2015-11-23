@@ -15,6 +15,9 @@ Specific version details:
     $Id: spm_reml.m 1165 2008-02-22 12:45:16Z guillaume $
     authors: John Ashburner & Karl Friston
 '''
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 
 # Copyright (C) 2014  Todd Pataky
 # _reml.py version: 0.2.0001 (2014/05/25)
@@ -50,14 +53,14 @@ def estimate_df_T(Y, X, eij, Q):
 	### ReML estimates:
 	trRV        = n - _rank(X)
 	ResSS       = (np.asarray(eij)**2).sum(axis=0)
-	q           = np.diag(np.sqrt( trRV / ResSS )).T
+	q           = np.diag(np.sqrt( old_div(trRV, ResSS) )).T
 	Ym          = Y*q
 	YY          = Ym*Ym.T / s
 	V,h         = reml(YY, X, Q)
-	V           = V * (n / np.trace(V))
+	V           = V * (old_div(n, np.trace(V)))
 	### effective degrees of freedom:
 	trRV,trRVRV = traceRV(V, X)
-	df          = trRV**2 / trRVRV
+	df          = old_div(trRV**2, trRVRV)
 	return df
 
 
@@ -135,17 +138,17 @@ def estimate_df_anova1(Y, X, eij, Q, c):
 	### ReML estimates:
 	trRV          = n - rankX
 	ResSS         = (np.asarray(eij)**2).sum(axis=0)
-	q             = np.diag(np.sqrt( trRV / ResSS )).T
+	q             = np.diag(np.sqrt( old_div(trRV, ResSS) )).T
 	Ym            = Y*q
 	YY            = Ym*Ym.T / s
 	V,h           = reml(YY, X, Q)
-	V            *= (n / np.trace(V))
+	V            *= (old_div(n, np.trace(V)))
 	### effective degrees of freedom (denominator):
 	trRV,trRVRV   = traceRV(V, X)
-	df2           = trRV**2 / trRVRV
+	df2           = old_div(trRV**2, trRVRV)
 	### effective degrees of freedom (numerator):
 	trMV,trMVMV   = traceMV(V, X, c)
-	df1           =  trMV**2 / trMVMV
+	df1           =  old_div(trMV**2, trMVMV)
 	df1           = max(df1,1.0)
 	return df1, df2
 	# df1,df2 = 2,2
@@ -157,19 +160,19 @@ def estimate_df_anova2(Y, X, eij, Q, C):
 	### ReML estimates:
 	trRV      = J - rankX
 	ResSS     = (np.asarray(eij)**2).sum(axis=0)
-	q         = np.diag(np.sqrt( trRV / ResSS )).T
+	q         = np.diag(np.sqrt( old_div(trRV, ResSS) )).T
 	Ym        = Y*q
 	YY        = Ym*Ym.T / s
 	V,h       = reml(YY, X, Q)
-	V        *= (J / np.trace(V))
+	V        *= (old_div(J, np.trace(V)))
 	### effective degrees of freedom (denominator):
 	trRV,trRVRV = traceRV(V, X)
-	df2         = trRV**2 / trRVRV
+	df2         = old_div(trRV**2, trRVRV)
 	### effective degrees of freedom (numerator):
 	df1         = []
 	for CC in C:
 		trMV,trMVMV = traceMV(V, X, CC)
-		df1.append( trMV**2 / trMVMV )
+		df1.append( old_div(trMV**2, trMVMV) )
 	df1       = [max(x,1.0)  for x in df1]
 	return df1, df2
 
@@ -187,14 +190,14 @@ def reml(YY, X, Q, N=1, K=128):
 	dFdhh = np.zeros((m,m))
 
 	hE   = np.matrix(np.zeros((m,1)))
-	hP   = np.eye(m)/exp(32)
+	hP   = old_div(np.eye(m),exp(32))
 
 	dF  = np.inf
 	for k in range(K):
 		C    = np.matrix(np.zeros((n,n)))
 		for i in range(m):
 			C   += Q[i] * float(h[i])
-		iC   = np.linalg.inv(C) + np.eye(n)/exp(32)
+		iC   = np.linalg.inv(C) + old_div(np.eye(n),exp(32))
 		iCX  = iC*X0
 		Cq   = np.linalg.inv(X0.T*iCX)
 	
@@ -241,7 +244,7 @@ def traceMV(V, X, c):
 	rankX       = _rank(X)
 	u,ds,v      = np.linalg.svd(X)
 	u           = np.matrix(u[:,:rankX])
-	ukX1o       = (np.matrix(np.diag(1/ds)) * np.matrix(v).T)*c
+	ukX1o       = (np.matrix(np.diag(old_div(1,ds))) * np.matrix(v).T)*c
 	ukX1o       = ukX1o[:rankX]
 	X1o         = u * ukX1o
 	###

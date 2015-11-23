@@ -23,6 +23,10 @@ These include:
 - plot_mean_sd
 '''
 from __future__ import print_function
+from __future__ import division
+from builtins import zip
+from builtins import range
+from past.utils import old_div
 
 # Copyright (C) 2014  Todd Pataky
 # plot.py version: 0.2.0005 (2014/06/24)
@@ -127,7 +131,7 @@ def plot_cloud(Y, ax=None, facecolor='0.8', edgecolor='0.8', alpha=0.5, autoset_
 	x1          = np.copy(x).tolist()
 	x1.reverse()
 	x,y         = x + x1, y0 + y1
-	patches     = PatchCollection([Polygon(zip(x,y))], edgecolors=None)
+	patches     = PatchCollection([Polygon(list(zip(x,y)))], edgecolors=None)
 	### plot:
 	ax.add_collection(patches)
 	pyplot.setp(patches, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha)
@@ -222,13 +226,13 @@ def plot_filled(y, ax=None, thresh=None, plot_thresh=True, color='k', lw=2, face
 			### interpolate if necessary:
 			if ind[0]  != ind0[0]:
 				dx      = x0[ind[0]] - x0[ind[0]-1]
-				dy      = (csign*thresh - y0[ind[0]])  / (y0[ind[0]] - y0[ind[0]-1])
+				dy      = old_div((csign*thresh - y0[ind[0]]), (y0[ind[0]] - y0[ind[0]-1]))
 				x[0]   += dy*dx
 			if ind[-1] != ind0[-1]:
 				dx      = x0[ind[-1]+1] - x0[ind[-1]]
-				dy      = (csign*thresh - y0[ind[-1]])  / (y0[ind[-1]+1] - y0[ind[-1]])
+				dy      = old_div((csign*thresh - y0[ind[-1]]), (y0[ind[-1]+1] - y0[ind[-1]]))
 				x[-1]  += dy*dx
-			polyg.append(  Polygon(zip(x,y))  )
+			polyg.append(  Polygon(list(zip(x,y)))  )
 		patches         = PatchCollection(polyg, edgecolors=None)
 		ax.add_collection(patches)
 		pyplot.setp(patches, facecolor=facecolor, edgecolor=facecolor)
@@ -316,7 +320,7 @@ def plot_spm(spm, ax=None, plot_ylabel=True, autoset_ylim=True, **kwdargs):
 	'''
 	ax     = _gca(ax)
 	x      = _getQ(None, spm.Q)
-	keys   = kwdargs.keys()
+	keys   = list(kwdargs.keys())
 	if 'color' not in keys:
 		kwdargs.update( dict(color='k') )
 	if ('lw' not in keys) or ('linewidth' not in keys):
@@ -341,7 +345,7 @@ def plot_spm_design(spm, ax=None, factor_labels=None, fontsize=10):
 	'''
 	def scaleColumns(X):
 		mn,mx     = np.min(X,axis=0) , np.max(X,axis=0)
-		Xs        = (X-mn)/(mx-mn+eps)
+		Xs        = old_div((X-mn),(mx-mn+eps))
 		Xs[np.isnan(Xs)] = 1   #if the whole column is a constant
 		return Xs
 	ax            = _gca(ax)
@@ -482,7 +486,7 @@ def plot_spmi_threshold_label(spmi, ax=None, lower=False, pos=None, autoset_ylim
 			y     = spmi.zstar + 0.005*(y1-y0)
 	else:
 		x,y   = pos
-	if 'color' not in kwdargs.keys():
+	if 'color' not in list(kwdargs.keys()):
 		kwdargs.update( dict(color='r') )
 	s         = r'$\alpha$=%.2f:  $%s^*$=%.3f' %(spmi.alpha, _stat2str(spmi.STAT), spmi.zstar)
 	h         = ax.text(x, y, s, **kwdargs)

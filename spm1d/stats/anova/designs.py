@@ -1,4 +1,9 @@
 from __future__ import absolute_import
+from __future__ import division
+from builtins import zip
+from builtins import range
+from builtins import object
+from past.utils import old_div
 
 import warnings
 import numpy as np
@@ -21,9 +26,9 @@ class Contrasts(object):
 	def plot(self, ax=None):
 		ax  = pyplot.gca() if ax==None else ax
 		ax.imshow(self.C, interpolation='nearest', cmap='gray', vmin=-1, vmax=1, aspect='auto')
-		xskip   = self.C.shape[1] / 10 + 1
-		yskip   = self.C.shape[0] / 10 + 1
-		pyplot.setp(ax, xticks=range(0, self.C.shape[1], xskip), yticks=range(0, self.C.shape[0], yskip))
+		xskip   = old_div(self.C.shape[1], 10) + 1
+		yskip   = old_div(self.C.shape[0], 10) + 1
+		pyplot.setp(ax, xticks=list(range(0, self.C.shape[1], xskip)), yticks=list(range(0, self.C.shape[0], yskip)))
 
 
 
@@ -35,15 +40,15 @@ class DesignBuilder(object):
 		self.n       = len(self.labels)   #number of main factors
 		self.ncol    = 0  #number of main columns
 		self.nTerms  = 0  #total number of model terms
-		self.colD    = dict(zip(self.labels,  [None]*self.n))
-		self.XD      = dict(zip(self.labels,  [None]*self.n))
+		self.colD    = dict(list(zip(self.labels,  [None]*self.n)))
+		self.XD      = dict(list(zip(self.labels,  [None]*self.n)))
 
 
 	def add_main_columns(self, label, X):
 		self.XD[label]   = X
 		i0,n             = self.ncol, X.shape[1]
 		self.colD[label] = np.arange(i0, i0+n)
-		self.COLS.append( range(i0,i0+n) )
+		self.COLS.append( list(range(i0,i0+n)) )
 		self.ncol       += n
 		self.nTerms     += 1
 
@@ -74,9 +79,9 @@ class _Design(object):
 			ax0 = pyplot.axes()
 		# self.design.plot(ax=ax0)
 		ax0.imshow(self.X, interpolation='nearest', cmap='gray', vmin=-1, vmax=1, aspect='auto')
-		xskip   = self.X.shape[1] / 10 + 1
-		yskip   = self.X.shape[0] / 10 + 1
-		pyplot.setp(ax0, xticks=range(0, self.X.shape[1], xskip), yticks=range(0, self.J, yskip))
+		xskip   = old_div(self.X.shape[1], 10) + 1
+		yskip   = old_div(self.X.shape[0], 10) + 1
+		pyplot.setp(ax0, xticks=list(range(0, self.X.shape[1], xskip)), yticks=list(range(0, self.J, yskip)))
 		### plot contrasts:
 		if plot_contrasts and self.contrasts!=None:
 			yy  = np.linspace(0.7, 0.05, 3)

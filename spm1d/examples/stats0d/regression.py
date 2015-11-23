@@ -1,4 +1,6 @@
 from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 
 import numpy as np
 from scipy import stats
@@ -22,7 +24,7 @@ print(spmti)
 
 #(2) Compare to scipy.stats result:
 slope,intercept,r,p,se = stats.linregress(x, y)
-t       = r * ((y.size-2)/(1-r*r) )**0.5
+t       = r * (old_div((y.size-2),(1-r*r)) )**0.5
 print('scipy.stats result:\n   r = %.5f\n   t = %.5f\n   p = %.5f' %(r,t,p))
 
 

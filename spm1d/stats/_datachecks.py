@@ -4,6 +4,8 @@ Data checking tools.
 (This and all modules whose names start with underscores
 are not meant to be accessed directly by the user.)
 '''
+from builtins import range
+from builtins import object
 
 # Copyright (C) 2014  Todd Pataky
 # _datachecks.py version: 0.2.0004 (2014/06/11)

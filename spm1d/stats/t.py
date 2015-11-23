@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from __future__ import division
+from past.utils import old_div
 
 
 import numpy as np
@@ -45,9 +47,9 @@ def glm(Y, X, c, Q=None):
 	eij    = Y - X*b                #residuals
 	R      = eij.T*eij              #residuals: sum of squares
 	df     = Y.shape[0] - rank(X)   #degrees of freedom
-	sigma2 = np.diag(R)/df          #variance
+	sigma2 = old_div(np.diag(R),df)          #variance
 	### compute t statistic
-	t      = np.array(c.T*b).flatten()  /   (np.sqrt(sigma2*float(c.T*(np.linalg.inv(X.T*X))*c)) + eps)
+	t      = old_div(np.array(c.T*b).flatten(),   (np.sqrt(sigma2*float(c.T*(np.linalg.inv(X.T*X))*c)) + eps))
 	### estimate df due to non-sphericity:
 	if Q!=None:
 		df = _reml.estimate_df_T(Y, X, eij, Q)
@@ -98,7 +100,7 @@ def regress(Y, x):
 	X[:,0]         = x
 	c              = [1,0]
 	spmt           = glm(Y, X, c)
-	spmt.r         = spmt.z / (  (J - 2 + spmt.z**2)**0.5)  #t = r * ((J-2)/(1-r*r) )**0.5
+	spmt.r         = old_div(spmt.z, (  (J - 2 + spmt.z**2)**0.5))  #t = r * ((J-2)/(1-r*r) )**0.5
 	spmt.isregress = True
 	return spmt
 

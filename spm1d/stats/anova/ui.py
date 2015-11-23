@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from __future__ import division
+from past.utils import old_div
 
 import warnings
 import numpy as np
@@ -19,14 +21,14 @@ def aov(model, contrasts, f_terms):
 	for term0,term1 in f_terms:
 		i       = contrasts.term_labels.index(term0)
 		ss0,df0 = SS[i], DF[i]
-		ms0     = ss0 / df0
+		ms0     = old_div(ss0, df0)
 		if term1 == 'Error':
 			ss1,df1,ms1  = model._SSE, model._dfE, model._MSE
 		else:
 			i       = contrasts.term_labels.index(term1)
 			ss1,df1 = SS[i], DF[i]
-			ms1     = ss1 / df1
-		f           = ms0 / ms1
+			ms1     = old_div(ss1, df1)
+		f           = old_div(ms0, ms1)
 		if model.dim == 0:
 			F.append( _spm.SPM0D_F(f, (df0,df1), (ss0,ss1), (ms0,ms1), model.eij, model.QT) )
 		else:

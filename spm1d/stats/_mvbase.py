@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 
 from math import sqrt,log
 import numpy as np
@@ -73,7 +76,7 @@ def _resel_counts(R, W):
 	### define resel counts:
 	rCounts      = []
 	rCounts.append(  mClusters  )
-	rCounts.append( (mNodes-mClusters)/float(W) )   #number of non-zero nodes, normalized by FWHM
+	rCounts.append( old_div((mNodes-mClusters),float(W)) )   #number of non-zero nodes, normalized by FWHM
 	return rCounts
 	
 

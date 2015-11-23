@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import range
 
 from math import sqrt,log
 import numpy as np

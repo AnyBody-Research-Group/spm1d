@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 
 # __version__ = '0.0.0005'  #2014.08.12
 
@@ -37,7 +40,7 @@ def manova1_single_node(Y, GROUP):
 	R0    = Y - X0*b0
 	R0    = R0.T*R0
 	### Wilk's lambda:
-	lam   = np.linalg.det(R) / (np.linalg.det(R0) + eps)
+	lam   = old_div(np.linalg.det(R), (np.linalg.det(R0) + eps))
 	### test statistic:
 	N,p,k = float(nResponses), float(nComponents), float(nGroups)
 	x2    = -((N-1) - 0.5*(p+k)) * log(lam)
@@ -70,7 +73,7 @@ def _manova1_single_node_efficient(Y, GROUP, X, Xi, X0, X0i, nGroups):
 	R0    = Y - X0*b0
 	R0    = R0.T*R0
 	### Wilk's lambda:
-	lam   = np.linalg.det(R) / (np.linalg.det(R0) + eps)
+	lam   = old_div(np.linalg.det(R), (np.linalg.det(R0) + eps))
 	# print lam
 	### test statistic:
 	(N,p),k = Y.shape, float(nGroups)

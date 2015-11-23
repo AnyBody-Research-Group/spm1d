@@ -8,6 +8,12 @@ are not meant to be accessed directly by the user.)
 This module contains class definitions for raw SPMs (raw test statistic continua)
 and inference SPMs (thresholded test statistic).
 '''
+from __future__ import division
+from builtins import zip
+from builtins import str
+from builtins import map
+from past.utils import old_div
+from builtins import object
 
 # Copyright (C) 2014  Todd Pataky
 # _spm.py version: 0.2.0006 (2014/07/09)
@@ -277,7 +283,7 @@ class _SPM(object):
 		nUpcrossings  = len(extents)
 		p_set         = 1.0
 		if nUpcrossings>0:
-			minextent     = min(extents)/self.fwhm
+			minextent     = old_div(min(extents),self.fwhm)
 			if self.STAT == 'T':
 				p_set = rft1d.t.p_set(nUpcrossings, minextent, zstar, self.df[1], self.Q, self.fwhm, withBonf=withBonf)
 			elif self.STAT == 'F':
@@ -289,7 +295,7 @@ class _SPM(object):
 		### cluster-level inference:
 		clusters  = []
 		for extent,minimum,centroid,sign in zip(extents, minima, centroids, signs):
-			xR    = extent / self.fwhm
+			xR    = old_div(extent, self.fwhm)
 			if self.STAT == 'T':
 				p = rft1d.t.p_cluster(xR, sign*minimum, self.df[1], self.Q, self.fwhm, withBonf=withBonf)
 			elif self.STAT == 'F':

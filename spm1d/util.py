@@ -12,6 +12,9 @@ This module contains a variety of convenience functions, including:
 - smooth
 '''
 from __future__ import absolute_import
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 
 # Copyright (C) 2014  Todd Pataky
 # util.py version: 0.2 (2014/05/01)
@@ -75,7 +78,7 @@ def interp(y, Q=101):
 	if (y.ndim==2) or (not np.isscalar(y[0])):
 		return np.asarray( [interp(yy, Q)   for yy in y] )
 	else:
-		x0     = range(y.size)
+		x0     = list(range(y.size))
 		x1     = np.linspace(0, y.size, Q)
 		return np.interp(x1, x0, y, left=None, right=None)
 
@@ -138,7 +141,7 @@ def p_critical_bonf(alpha, n):
 	elif alpha>=1:
 		return 1
 	else:
-		return 1 - (1.0-alpha)**(1.0/n)
+		return 1 - (1.0-alpha)**(old_div(1.0,n))
 
 
 
@@ -167,5 +170,5 @@ def smooth(Y, fwhm=5.0):
 	
 	>>> fwhm = sd * sqrt(8*log(2))
 	'''
-	sd    = fwhm / sqrt(8*log(2))
+	sd    = old_div(fwhm, sqrt(8*log(2)))
 	return gaussian_filter1d(Y, sd, mode='wrap')

@@ -1,3 +1,6 @@
+from __future__ import division
+from builtins import object
+from past.utils import old_div
 
 import numpy as np
 import rft1d
@@ -56,7 +59,7 @@ class LinearModel(object):
 		self._SSE       = np.diag( Y.T * self._R * Y )
 		self._dfE       = self._rankR
 		if self._dfE > eps:
-			self._MSE = self._SSE / self._dfE
+			self._MSE = old_div(self._SSE, self._dfE)
 		if approx_residuals is None:
 			self.eij    = np.asarray(self.Y - X*self._beta)  #residuals
 		else:
