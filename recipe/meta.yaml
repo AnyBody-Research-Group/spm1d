@@ -29,6 +29,7 @@ requirements:
     - matplotlib >=1.4
     - rft1d >=0.1
     - future
+    - pytables
 
 #test:
 #  imports:
