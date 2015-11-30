@@ -2,7 +2,7 @@ from __future__ import print_function
 from builtins import zip
 from builtins import str
 from builtins import object
-
+from future.utils import text_to_native_str
 import os
 import numpy as np
 
@@ -65,7 +65,7 @@ class _Dataset(object):
 		s     += '  %s          :  %s\n' %(self.STAT, str(self.z))
 		s     += '  df         :  %s\n' %str(self.df)
 		s     += '  p          :  %s\n' %str(self.p)
-		return s
+		return text_to_native_str(s)
 
 
 
