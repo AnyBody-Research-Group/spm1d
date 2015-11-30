@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import os
 import numpy as np
@@ -7,7 +8,7 @@ import spm1d
 # load data (30 curves, arbitrary length):
 dir0         = os.path.dirname(__file__)
 fname        = os.path.join(dir0, 'data', 'ex_kinematics_for_interpolation.npy')
-Y0           = np.load(fname)   #30 curves
+Y0           = np.load(fname, encoding='latin1')   #30 curves
 
 
 # interpolate to 101 points:
